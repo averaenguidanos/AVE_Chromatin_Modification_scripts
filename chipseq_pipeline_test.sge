@@ -1,0 +1,50 @@
+#$ -S /bin/bash
+#$ -cwd
+
+PARAMS=$1
+
+GENOME=$(grep genome_link $PARAMS | awk '{ print $2 }')
+echo $GENOME
+ANNOTATION=$(grep annotation_link $PARAMS | awk '{ print $2 }')
+echo $ANNOTATION
+GENOME_NAME=$(grep genome_name $PARAMS | awk '{ print $2 }')
+echo $GENOME_NAME
+ANNOTATION_NAME=$(grep annotation_name $PARAMS | awk '{ print $2 }')
+echo $ANNOTATION_NAME
+
+## Building working directory
+
+mkdir genome
+cd genome
+
+## Accession to genome folder
+
+wget ${GENOME}
+mv ${GENOME_NAME}.fa.gz genome.fa.gz
+gunzip genome.fa.gz
+
+## Building genome index
+
+bwa index genome.fa
+echo "Genome index built"
+
+## Generating chromosome sizes from genome.fa
+
+samtools faidx genome.fa 
+cut -f1,2 genome.fa.fai > chromsizes
+
+if [ ! -f "chromsizes"];
+then
+	echo "$0: File 'chromsizes' not found."
+else
+	echo "File 'chromsizes' found."
+fi
+
+## Access to annotation folder
+
+wget ${ANNOTATION} 
+mv ${ANNOTATION_NAME}.gff3.gz annotation.gff3.gz
+gunzip annotation.gff3.gz
+echo "Annotation ready"
+
+
