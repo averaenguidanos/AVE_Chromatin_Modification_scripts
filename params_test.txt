@@ -1,4 +1,0 @@
-genome_link: http://hgdownload.soe.ucsc.edu/goldenPath/hg38/bigZips/hg38.fa.gz
-genome_name: hg38
-annotation_link: http://ftp.ensembl.org/pub/release-104/gff3/homo_sapiens/Homo_sapiens.GRCh38.104.chr.gff3.gz
-annotation_name: Homo_sapiens.GRCh38.104.chr
