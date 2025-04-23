@@ -1,0 +1,44 @@
+############################# CORRELATION PLOTTING #############################
+
+# Generating a correlation matrix from signal on selected regions o whole genome mode.
+# - bins: bin mode for whole genome correlation analysis.
+# - bs: bin size in bases for correlation calculation. Only for bins mode.
+# - BED-file: selected regions mode for correlation analysis.
+# - BED: bed file containing selected regions. Only for BED-file mode.
+# - b: bam/bigwig signal files (space-separated).
+# - o: correlation matrix .npz file name.
+# - bl: bed file containing regions that will be excluded.
+# - p: number of processors.
+
+# in .bigwig data WD
+  multiBigwigSummary bins -bs 10000 -b *.bw -o ../results/correlations.npz -p 3 --smartLabels
+
+# Selected regions mode
+# multiBigwigSummary BED-file --BED ../../../annotation/Homo_sapiens_ann_genes_110.bed -b *.bam -o ../../results/correlations.npz -p 40 -bl ../../../annotation/Saccharomyces_cerevisiae_excluded_regions.bed --smartLabels
+
+
+### Clustered Heatmap
+# Plotting previus matrix as a clustered heatmap.
+# - in: .npz file outputted by multiBigwigSummary/multiBamSummary.
+# - c: correlation method: spearman or pearson.
+# - whatToPlot: heatmap or scatterplot
+# - o: plot file including file extension.
+# - skipZeros: regions are removed when all signal values are 0.
+# - plotHeight: plot height.
+# - plotWidth: plot width.
+# - colorMap: color range. Visit https://matplotlib.org/2.0.2/examples/color/colormaps_reference.html to decide the best selection.
+# - removeOutliers: when outliers can change correlation values.
+
+
+plotCorrelation -in ../results/correlations.npz -c pearson --whatToPlot heatmap -o ../results/heatmap.pdf --skipZeros --plotHeight 10 --plotWidth 10 --colorMap bwr --removeOutliers
+
+
+
+### Scatterplot
+
+plotCorrelation -in ../results/correlations.npz -c pearson --whatToPlot scatterplot -o ../results/scatterplot.pdf --skipZeros --removeOutliers
+
+
+
+### PCA
+plotPCA -in ../results/correlations.npz -o ../results/pca.pdf
