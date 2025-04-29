@@ -11,7 +11,7 @@
 # - p: number of processors.
 
 # in .bigwig data WD
-  multiBigwigSummary bins -bs 10000 -b *.bw -o ../results/correlations.npz -p 3 --smartLabels
+  multiBigwigSummary bins -bs 10000 -b *.bw -o ../results/_bin_counts.npz --outRawCounts -o ../results/_bin_counts.tsv -p 3 --smartLabels
 
 # Selected regions mode
 # multiBigwigSummary BED-file --BED ../../../annotation/Homo_sapiens_ann_genes_110.bed -b *.bam -o ../../results/correlations.npz -p 40 -bl ../../../annotation/Saccharomyces_cerevisiae_excluded_regions.bed --smartLabels
