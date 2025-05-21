@@ -22,14 +22,12 @@ bedtools makewindows -g hg38.genome -w 50000 > genome_50kb.bed
 
 ############################# COVERAGE OVER REGIONS #############################
 
-cd ${WD}/results
-
-multiBamSummary BED-file -p 40 --BED /home/gmzlab/Documents/ricardo/genome/homo_sapiens_unknown/genome_50kb.bed -b ../bam_files/*.bam -o results.npz --outRawCounts output_rawCount.txt
+multiBamSummary BED-file -p 12 --BED genome_50kb.bed -b ../bam_files/*.bam -o counts/50kb_rawCount.npz --outRawCounts counts/50kb_rawCount.txt
 
 cat output_rawCount.txt | sort -k1,1 -k2,2n > output_rawCount.sort.txt
 
-
-
+	
+		
 
 ## B. Preparing and training the HMM model for chromatin states
 
@@ -56,7 +54,19 @@ java -jar ../../opt/ChromHMM/ChromHMM.jar LearnModel -p 12 -b 50000 binarize_agu
 
 
 
-## C. Obtain the correlation between the emission parameters of differente models and a reference ##
+## C. Reordering the states or columns of a model without relearning the model, and outputs a model file and emission and transition tables with the states reordered ##
+
+############################# COLUMN REORDER #############################
+
+java -jar ../../opt/ChromHMM/ChromHMM.jar Reorder -f marks_order.txt model_agustin_10kb/model_4.txt model_10kb_reordered
+
+#############################  #############################
+
+
+
+
+
+## D. Obtain the correlation between the emission parameters of differente models and a reference ##
 
 ############################# CORRELATION BETWEEN MODELS #############################
 
