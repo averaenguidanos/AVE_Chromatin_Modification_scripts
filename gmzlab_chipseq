@@ -393,15 +393,16 @@ plotHeatmap -m matrix1.gz -o metaplot_sort_k37me3.pdf --plotType fill --heatmapH
 
 plotHeatmap -m matrix1.gz -o metaplot_sort_k37me3.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing region_length --legendLocation best --sortUsingSamples 1 --clusterUsingSamples 1 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed --linesAtTickMarks 
 
-
 plotHeatmap -m matrix1.gz -o metaplot_sort_k9me3.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 2 --clusterUsingSamples 2 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
 plotHeatmap -m matrix1.gz -o metaplot_sort_k37me1.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 3 --clusterUsingSamples 3 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
 plotHeatmap -m matrix1.gz -o metaplot_sort_k36me3.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 4 --clusterUsingSamples 4 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
 
+plotHeatmap -m matrix_omics.gz -o metaplot_omics.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 1 --clusterUsingSamples 1 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
+
+
 
 
 plotProfile -m matrix1.gz -o profile1.pdf --plotType fill --legendLocation best --endLabel 'TTS' --colors green blue red gray --yMax 0.3 0.15 0.15 0.15 --kmeans 4 --outFileSortedRegions clusters.bed --clusterUsingSamples 1 --numPlotsPerRow 3  --linesAtTickMarks 
-
 
 # plotProfile -m matrix1.gz -o profile1.pdf --plotType std --legendLocation best --perGroup --endLabel 'TTS' --colors green blue red --yMax 2 --kmeans 2 --outFileSortedRegions clusters/clusters.bed --clusterUsingSamples 1 --numPlotsPerRow 3
 
