@@ -74,3 +74,28 @@ java -jar ../../opt/ChromHMM/ChromHMM.jar CompareModels
 
 #############################  #############################
 
+
+
+## E. Take a learned model and binarized data and output a segmentation. ##
+
+############################# NEW SEGMENTATION #############################
+
+java -jar ../../opt/ChromHMM/ChromHMM.jar MakeSegmentation -b 50000 model_5kb_reordered/model_5.txt binarize_agustin_50kb/ model_5kb_segmented_50kb
+
+#############################  #############################
+
+
+
+grep E1 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E1.bed ;
+grep E2 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E2.bed ;
+grep E3 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E3.bed ;
+grep E4 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E4.bed ;
+grep E5 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E5.bed
+
+bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E1.bed > 50kb_analysis/E1_bins_50kb.bed ; 
+bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E2.bed > 50kb_analysis/E2_bins_50kb.bed ;
+bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E3.bed > 50kb_analysis/E3_bins_50kb.bed ;
+bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E4.bed > 50kb_analysis/E4_bins_50kb.bed ;
+bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E5.bed > 50kb_analysis/E5_bins_50kb.bed 
+
+
