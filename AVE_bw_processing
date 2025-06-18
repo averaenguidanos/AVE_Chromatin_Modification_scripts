@@ -86,3 +86,15 @@ for i in h3k37me1*.bw; do
 done
 
 date ;
+
+
+
+
+#### Corregir BigWigs por log2 e input (sin suavizar)
+
+bigwigCompare -b1 h3k37me3_B12_1.bw -b2 input2_B12_1.bw --operation log2 --skipNAs --skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k37me3_log_corrected.bw -p 12 ; 
+bigwigCompare -b1 h3k37me1_B12.bw -b2 input1_B12.bw --operation log2 --skipNAs--skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k37me1_log_corrected.bw -p 12 ;
+bigwigCompare -b1 h3k9me3.bw -b2 input.bw --operation log2 --skipNAs --skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k9me3_log_corrected.bw -p 12 ;
+bigwigCompare -b1 h3k36me3.bw -b2 input.bw --operation log2 --skipNAs --skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k36me3_log_corrected.bw -p 12 ;
+bigwigCompare -b1 h3k27me3.bw -b2 input.bw --operation log2 --skipNAs --skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k27me3_log_corrected.bw -p 12 ;
+bigwigCompare -b1 h3k36me2.bw -b2 input.bw --operation log2 --skipNAs --skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k36me2_log_corrected.bw -p 12 ; 
