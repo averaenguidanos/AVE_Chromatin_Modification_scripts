@@ -59,7 +59,7 @@ java -jar ../../opt/ChromHMM/ChromHMM.jar LearnModel -p 12 -b 50000 binarize_agu
 ############################# COLUMN REORDER #############################
 
 java -jar ../../opt/ChromHMM/ChromHMM.jar Reorder -f marks_order.txt model_agustin_10kb/model_4.txt model_10kb_reordered
-
+java -jar ../../opt/ChromHMM/ChromHMM.jar Reorder -f marks_order.txt -o states_order.tsv -r model_t2t/RPE_5_segments.bed model_t2t_reordered_final/RPE_5_segments_reordered.bed model_t2t/model_5.txt model_t2t_reordered_final
 #############################  #############################
 
 
