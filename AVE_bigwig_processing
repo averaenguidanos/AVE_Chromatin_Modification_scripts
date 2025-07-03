@@ -1,21 +1,22 @@
-# Crear carpeta de salida si no existe
+## This script calculates bigWig coverage signal from BAM files. It also smoothes the coverage for better IGV visualization and performs input correction. ##
+
 mkdir -p WT/bw_files_merge/bw_smoothed_10000
 
-# --------- Generar BigWig suavizados (smoothed) ----------
+# --------- Generating smoothed BigWig files for all samples ----------
 
-# 1. Para mutK37R
+# 1. mutK37R
 for bam in mutK37R/*.bam; do
     base=$(basename "$bam" .bam)
     bamCoverage \
-        -p 4 \
+        -p 4 \                                    # number of processors
         -b "$bam" \
-        -bs 50 \
-        --normalizeUsing CPM \
-        --smoothLength 10000 \
+        -bs 50 \                                  # bin Size
+        --normalizeUsing CPM \                    # normalization method
+        --smoothLength 10000 \                    # bp window for smoothing
         -o "WT/bw_files_merge/bw_smoothed_10000/${base}.bw"
 done
 
-# 2. Para WT/bam_files_merge
+# 2. WT/bam_files_merge
 for bam in WT/bam_files_merge/*.bam; do
     base=$(basename "$bam" .bam)
     bamCoverage \
@@ -27,7 +28,7 @@ for bam in WT/bam_files_merge/*.bam; do
         -o "WT/bw_files_merge/bw_smoothed_10000/${base}.bw"
 done
 
-# 3. Para WT/bam_files_merge/extra_omics
+# 3. WT/bam_files_merge/extra_omics
 for bam in WT/bam_files_merge/extra_omics/*.bam; do
     base=$(basename "$bam" .bam)
     bamCoverage \
@@ -39,11 +40,13 @@ for bam in WT/bam_files_merge/extra_omics/*.bam; do
         -o "WT/bw_files_merge/bw_smoothed_10000/${base}.bw"
 done
 
-# --------- Calcular bigwigCompare (ratio input/ChIP) ----------
+# --------- Input correction bigwigCompare (ratio input/ChIP) ----------
+
+# Using the input reference to correct the coverage signal. Applying ratio with a pseudocount of 0.001 yields the best results for visualization
 
 cd WT/bw_files_merge/bw_smoothed_10000
 date ;
-# 4. Para todos los archivos h3k*, excepto B1
+# 4. For all h3k* files, except B10 and B12
 for i in $(ls h3k* | grep -v B1); do
     base=$(basename "$i" .bw)
     bigwigCompare \
@@ -57,7 +60,7 @@ for i in $(ls h3k* | grep -v B1); do
         -p 12
 done
 
-# 5. h3k37me3 usando input2_B12_1.bw
+# 5. h3k37me3 using input2_B12_1.bw
 for i in h3k37me3*.bw; do
     base=$(basename "$i" .bw)
     bigwigCompare \
@@ -71,7 +74,7 @@ for i in h3k37me3*.bw; do
         -p 12
 done
 
-# 6. h3k37me1 usando input1_B12.bw
+# 6. h3k37me1 using input1_B12.bw
 for i in h3k37me1*.bw; do
     base=$(basename "$i" .bw)
     bigwigCompare \
@@ -90,7 +93,7 @@ date ;
 
 
 
-#### Corregir BigWigs por log2 e input (sin suavizar)
+#### Correcting BigWigs with log2 and input for metageneplotting (no smoothing)
 
 bigwigCompare -b1 h3k37me3_B12_1.bw -b2 input2_B12_1.bw --operation log2 --skipNAs --skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k37me3_log_corrected.bw -p 12 ; 
 bigwigCompare -b1 h3k37me1_B12.bw -b2 input1_B12.bw --operation log2 --skipNAs--skipZeroOverZero --binSize 50 -o bw_input_corrected_log2/h3k37me1_log_corrected.bw -p 12 ;
