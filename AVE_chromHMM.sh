@@ -103,3 +103,13 @@ bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb
 
 #############################  #############################
 
+
+
+
+## G. Use the annotated genes instead of bins for intersect segmentation ##
+
+########################## E1 GENES SCATTERPLOT SELECTION #######################
+# -f: percentage of minimum overlap with target gene
+bedtools intersect -u -f 0.5 -a Data/genome/Homo_sapiens_ann_genes_110_noChr.bed -b results/chromHMM/5kb_analysis/5kb_5_E1.bed > results/chromHMM/5kb_analysis/E1_genes.bed
+
+multiBamSummary BED-file -p 12 --BED results/chromHMM/5kb_analysis/E1_genes.bed -b Data/mutK37R/h3k37me3_B12_1.bam Data/WT/bam_files_merge/h3k9me3.bam Data/mutK37R/input2_B12_1.bam Data/WT/bam_files_merge/input.bam -o results/chromHMM/5kb_analysis/genes_rawCount.npz --outRawCounts results/chromHMM/5kb_analysis/genes_rawCount.txt
