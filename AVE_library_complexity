@@ -6,7 +6,6 @@ cd /mnt/c/Users/gmzla/OneDrive\ -\ UNIVERSIDAD\ DE\ SEVILLA\ \(1\)/Escritorio/AG
 samtools sort -n -@ 10 -o sorted_h3k37me3_B12_1.bam ../h3k37me3_B12_1.bam
 preseq lc_extrap -bam -verbose -quick sorted_h3k37me3_B12_1.bam &> log_preseq.txt
 
-
 # M_1: Extracted from "COUNTS OF 1".
 # M_2: Extracted from "OBSERVED COUNTS" for 2.
 # M_DISTINCT: Extracted from "DISTINCT READS"
