@@ -13,8 +13,6 @@
 # - missingDataAsZero: NA values are converted into 0.
 # - skipZeros: regions are removed when all signal values are 0.
 
-# Take care of bin size. Bin size is set for the regionBodyLength parameters and not for the real length of the gene.
-
 # MARKS
 computeMatrix scale-regions -S Data/WT/bw_files_merge/h3k37me3_B12_1.bw Data/WT/bw_files_merge/h3k9me3.bw Data/WT/bw_files_merge/h3k27me3.bw Data/WT/bw_files_merge/h3k36me2.bw Data/WT/bw_files_merge/h3k37me1_B12.bw Data/WT/bw_files_merge/h3k36me3.bw -R Data/genome/Homo_sapiens_ann_genes_110.bed -o results/metaplot/matrix1.gz --binSize 200 -b 3000 -a 3000 -p 12 -q --regionBodyLength 6000 --missingDataAsZero --skipZeros --maxThreshold 1000 # --minThreshold 0
 
@@ -54,11 +52,10 @@ plotHeatmap -m matrix_omics.gz -o metaplot_omics.pdf --plotType fill --heatmapHe
 
 plotHeatmap -m matrix_omics_clustered.gz   -o metaplot_omics_clustered.pdf   --plotType fill --heatmapHeight 14 --heatmapWidth 6   --colorList blue,white,red   --sortRegions no --outFileSortedRegions clusters_omics_clustered.bed  --legendLocation best   --samplesLabel "ATAC" "Pol II" "Nascent RNA" "Early Oris"   --regionsLabel "High H3K37me3" "Low H3K37me3"   --yMin 0 --yMax 1.4 1 0.3 0.25   -min 0 -max 1.4 1 0.3 0.25
 
-
-# REGION LENGTH
+# SORTING BY REGION LENGTH
 plotHeatmap -m matrix1.gz -o metaplot_sort_k37me3.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing region_length --legendLocation best --sortUsingSamples 1 --clusterUsingSamples 1 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed --linesAtTickMarks 
 
-# OTHERS
+# SORTING BY OTHER MARKS
 plotHeatmap -m matrix1.gz -o metaplot_sort_k9me3.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 2 --clusterUsingSamples 2 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
 plotHeatmap -m matrix1.gz -o metaplot_sort_k37me1.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 3 --clusterUsingSamples 3 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
 plotHeatmap -m matrix1.gz -o metaplot_sort_k36me3.pdf --plotType fill --heatmapHeight 14 --heatmapWidth 6  --colorList blue,white,red --sortUsing mean --legendLocation best --sortUsingSamples 4 --clusterUsingSamples 4 -min 0 -max 0.25 --yMin 0 --yMax 0.25  --kmeans 3 --outFileSortedRegions clusters.bed
@@ -73,7 +70,6 @@ plotProfile -m matrix1.gz -o profile1.pdf --plotType fill --legendLocation best 
 ############################# E1-SPECIFIC METAPLOTTING #############################
 
 cd results/e1_metaplot/
-
 
 # We use the 5kb_5_E1.bed with complete bins as a reference.
 computeMatrix scale-regions -R 5kb_5_E1.bed --outFileName matrix_marks.gz --outFileNameMatrix matrix_marks.txt -S ../../Data/WT/bw_files_merge/h3k37me3_B12_1.bw ../../Data/WT/bw_files_merge/h3k9me3.bw ../../Data/WT/bw_files_merge/h3k27me3.bw ../../Data/WT/bw_files_merge/h3k36me2.bw ../../Data/WT/bw_files_merge/h3k37me1_B12.bw ../../Data/WT/bw_files_merge/h3k36me3.bw   --binSize 200 -b 0 -a 0 -p 12 -q --regionBodyLength 5000 --missingDataAsZero --skipZeros --maxThreshold 500 --smartLabels
