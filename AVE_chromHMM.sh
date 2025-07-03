@@ -15,9 +15,9 @@ THREADS=$(grep number_processors: $1 | awk '{ print $2 }')
 ## A. Calculating coverage over the designated bins for later analysis ##
 
 ############################# GETTING GENOMIC BINS #############################
-
 cd $GENOME
 
+## -w binsize
 bedtools makewindows -g hg38.genome -w 50000 > genome_50kb.bed
 
 ############################# COVERAGE OVER REGIONS #############################
@@ -40,14 +40,13 @@ do
 done
 
 ############################# BINARIZING GENOME COVERAGE #############################
-
 cd ${WD}
 
 java -jar /home/gmzlab/opt/ChromHMM/ChromHMM.jar BinarizeBed -b 50000 /home/gmzlab/Documents/ricardo/genome/homo_sapiens_ucsc/chromsizes bed_files metadata/cell_mark_table_bed.tsv results/binarize
 
 ############################# CHROMATIN STATES #############################
 
-# in results/chromHMM
+# Provide number of states and reference genome directory
 java -jar ../../opt/ChromHMM/ChromHMM.jar LearnModel -p 12 -b 50000 binarize_agustin_50kb/ model_50kb 4 hg38 
 
 #############################  #############################
@@ -60,6 +59,7 @@ java -jar ../../opt/ChromHMM/ChromHMM.jar LearnModel -p 12 -b 50000 binarize_agu
 
 java -jar ../../opt/ChromHMM/ChromHMM.jar Reorder -f marks_order.txt model_agustin_10kb/model_4.txt model_10kb_reordered
 java -jar ../../opt/ChromHMM/ChromHMM.jar Reorder -f marks_order.txt -o states_order.tsv -r model_t2t/RPE_5_segments.bed model_t2t_reordered_final/RPE_5_segments_reordered.bed model_t2t/model_5.txt model_t2t_reordered_final
+
 #############################  #############################
 
 
@@ -76,7 +76,7 @@ java -jar ../../opt/ChromHMM/ChromHMM.jar CompareModels
 
 
 
-## E. Take a learned model and binarized data and output a segmentation. ##
+## E. Take a learned model and binarized data, and output a segmentation. ##
 
 ############################# NEW SEGMENTATION #############################
 
@@ -85,6 +85,9 @@ java -jar ../../opt/ChromHMM/ChromHMM.jar MakeSegmentation -b 50000 model_5kb_re
 #############################  #############################
 
 
+## F. Extract individual states from the segmentation file; and divide them into isolated bins for normalization ##
+
+############################# STATES INDIVIDUAL ANALYSIS #############################
 
 grep E1 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E1.bed ;
 grep E2 model_5kb_segmented_50kb/RPE_5_50kb_segments.bed > 50kb_analysis/50kb_5_E2.bed ;
@@ -98,4 +101,5 @@ bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb
 bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E4.bed > 50kb_analysis/E4_bins_50kb.bed ;
 bedtools intersect -u -a ../../Data/genome/genome_50kb.bed -b 50kb_analysis/50kb_5_E5.bed > 50kb_analysis/E5_bins_50kb.bed 
 
+#############################  #############################
 
