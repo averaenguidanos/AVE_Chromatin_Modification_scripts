@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# LOADING PARAMETERS:
+# LOADING PARAMETERS (inherited from the parent function):
 
 # Number of processors.
 THREADS=$1
@@ -23,8 +23,9 @@ echo 'Gunzipping...'
 
 if [ $PAIRED_END == 'yes' ]
 then
+	## PAIRED-END MAPPING
 	
-	gunzip -k ${SAMPLE}_1.fastq.gz
+ 	gunzip -k ${SAMPLE}_1.fastq.gz
 	gunzip -k ${SAMPLE}_2.fastq.gz
 	
 	echo 'Number of reads in the original' $SAMPLE 'paired end .fastq files'
@@ -32,32 +33,7 @@ then
 	expr `wc -l ${SAMPLE}_2.fastq | awk '{ print $1 }'` / 4
 	echo ''
 	
-	# Trimming: (discarded)
-	# PE: paired end mode.
-	# -threads: number of processors.
-	# LEADING: sequencing quality threshold for 5' trimming.
-	# TRAILING: sequencing quality threshold for 3' trimming.
-	# MINLEN: minimum length for keeping a read.
-	# CROP: tolerated length. Longer reads will be cropped to the given value.
-	#java -jar /home/gmzlab/Documents/ricardo/scripts/trimmomatic-0.39.jar PE -threads $THREADS ${SAMPLE}_1.fastq ${SAMPLE}_2.fastq ${SAMPLE}_1_trimmed.fastq ${SAMPLE}_1_trimmed_unpaired.fastq ${SAMPLE}_2_trimmed.fastq ${SAMPLE}_2_trimmed_unpaired.fastq CROP:50
-	#LEADING:28 TRAILING:28 MINLEN:48
-	
-	# Cleaning up:
-	# -f: ignore if file does not exist.
-	#rm -f ${SAMPLE}_1_trimmed_unpaired.fastq ${SAMPLE}_2_trimmed_unpaired.fastq
-	
-	#echo 'Number of reads in the trimmed' $SAMPLE 'paired end .fastq files'
-	#expr `wc -l ${SAMPLE}_1_trimmed.fastq | awk '{ print $1 }'` / 4
-	#expr `wc -l ${SAMPLE}_2_trimmed.fastq | awk '{ print $1 }'` / 4
-	#echo ''
-	
-	#echo ${SAMPLES[$i]} 'quality control after trimming:'
-	#fastqc *trimmed.fastq*
-	#mv *fastqc* -t ../../quality_control
-	
-	#mv ${SAMPLE}_1_trimmed.fastq ${SAMPLE}_1.fastq
-	#mv ${SAMPLE}_2_trimmed.fastq ${SAMPLE}_2.fastq
-	
+
 	# Mapping with BWA aligner:
 	# -n: maximum edit distance.
 	# -k: maximum edit distance in the seed.
@@ -65,7 +41,8 @@ then
 	# -t: number of processors.
 	bwa aln -n 3 -k 2 -R 300 -t $THREADS $GENOME_FILE ${SAMPLE}_1.fastq > ${SAMPLE}_1.sai
 	bwa aln -n 3 -k 2 -R 300 -t $THREADS $GENOME_FILE ${SAMPLE}_2.fastq > ${SAMPLE}_2.sai
-	# -n: maximum number of aligments to output in the XA (alternative hits) tag for reads paired properly.
+	
+ 	# -n: maximum number of aligments to output in the XA (alternative hits) tag for reads paired properly.
 	bwa sampe -n 3 $GENOME_FILE ${SAMPLE}_1.sai ${SAMPLE}_2.sai ${SAMPLE}_1.fastq ${SAMPLE}_2.fastq > ${SAMPLE}.sam
 	
 	# Cleaning up:
@@ -77,26 +54,14 @@ then
 	fi
 else
 	
-	gunzip -k ${SAMPLE}.fastq.gz
+ 	## SINGLE-END MAPPING
+	
+ 	gunzip -k ${SAMPLE}.fastq.gz
 	
 	echo 'Number of reads in the original' $SAMPLE 'single end .fastq file'
 	expr `wc -l ${SAMPLE}.fastq | awk '{ print $1 }'` / 4
 	echo ''
 	
-	# Trimming: (discarded)
-	# SE: single end mode.
-	# -threads: number of processors.
-	# LEADING: sequencing quality threshold for 5' trimming.
-	# TRAILING: sequencing quality threshold for 3' trimming.
-	# MINLEN: minimum length for keeping a read.
-	# CROP: tolerated length. Longer reads will be cropped to the given value.
-	#java -jar /home/gmzlab/Documents/ricardo/scripts/trimmomatic-0.39.jar SE -threads $THREADS ${SAMPLE}.fastq ${SAMPLE}_trimmed.fastq LEADING:28 TRAILING:28 MINLEN:48 CROP:50 
-	
-	#echo 'Number of reads in the trimmed' $SAMPLE 'paired end .fastq files'
-	#expr `wc -l ${SAMPLE}_trimmed.fastq | awk '{ print $1 }'` / 4
-	#echo ''
-	
-	# mv ${SAMPLE}_trimmed.fastq ${SAMPLE}.fastq
 	
 	# Mapping with BWA aligner:
 	# -n: maximum edit distance.
