@@ -13,12 +13,13 @@ fi
 
 
 ############################# LOADING PARAMETERS (I) #############################
+# You must provide a .txt containing these parameters as the only argument when calling the AVE_chipseq.sh function.
 
 # Working directory: absolute path to the folder containing all files.
 WD=$(grep working_directory: $1 | awk '{ print $2 }')
 # Genome folder absolute path.
 GENOME=$(grep genome_path: $1 | awk '{ print $2 }')
-# Wether Spike-in is included or not.
+# Wether Spike-in is included or not. Spiking a sample with DNA from a different organism and performing a secondary mapping allows normalization accounting for antibody effectiveness.
 SPIKE=$(grep spikein: $1 | awk '{ print $2 }')
 # Spike-in genome folder absolute path.
 GENOME_SPIKE=$(grep genome_spike: $1 | awk '{ print $2 }')
@@ -50,7 +51,6 @@ if [ -z $HISTONE ]
 then
 	HISTONE='not_provided'
 fi
-
 
 
 
@@ -112,6 +112,8 @@ else
 fi
 echo ''
 
+# Make sure that all the parameters are correct. If not, stop the pipeline and correct them.
+
 sleep 10s
 
 
@@ -125,7 +127,7 @@ echo ''
 
 ############################# BUILDING GENOME INDEX ############################# 
 
-# This is a backup section for new organisms analysis when genome index is not built yet.
+# This is a backup section for new assemblies when genome index is not built yet.
 
 #cd $GENOME
 #date
@@ -153,7 +155,7 @@ do
 	echo ''
 	
 	
-	# MAPPING EACH REPLICATE
+	# MAPPING EACH REPLICATE   --> calling the AVE_read_mapping.sh script
 	for j in `seq 1 ${NREP[$i]}`
 	do
 		echo 'Processing' ${SAMPLES[$i]}_$j 'on'
